@@ -1,0 +1,18 @@
+{
+	"name": "heyday/silverstripe-redirects",
+	"description": "DB Mangement of redirects",
+	"license": "MIT",
+	"authors": [{
+		"name": "Cam Spiers",
+		"email": "camspiers@gmail.com"
+	}],
+	"type": "silverstripe-module",
+	"require-dev": {
+		"silverstripe/framework": "3.1.*@dev"
+	},
+	"autoload": {
+		"psr-4": {
+			"Heyday\\Redirects\\": "src/"
+		}
+	}
+}
