@@ -22,7 +22,7 @@ Injector:
   CachedRedirectUrlDataSource:
     class: Heyday\Redirects\DataSource\CachedDataSource
     constructor:
-      0: %$RedirectUrlDataList
+      0: %$RedirectUrlDataSource
       1: %$RedirectsCache
     
   Heyday\Redirects\Redirector:
