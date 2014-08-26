@@ -1,11 +1,6 @@
 <?php
 
-namespace Heyday\Redirects;
-
-use DataObject;
-use Permission;
-use PermissionProvider;
-use RequiredFields;
+use Heyday\Redirects\DataSource\CachedDataSource;
 
 /**
  * @package Heyday\Redirects
@@ -13,30 +8,38 @@ use RequiredFields;
 class RedirectUrl extends DataObject implements PermissionProvider
 {
     /**
-     *
+     * Permission for managing redirects
      */
     const PERMISSION = 'MANAGE_REDIRECTS';
 
     /**
      * @var array
      */
-    static $db = array(
-        'From' => "Text",
-        'To' => 'Text'
-    );
+    private static $db = [
+        'From' => 'Varchar(2560)',
+        'To' => 'Varchar(2560)'
+    ];
 
     /**
      * @var array
      */
-    static $summary_fields = array(
+    private static $summary_fields = [
         'From',
         'To'
-    );
+    ];
 
     /**
-     * @var bool
+     * @var \Heyday\Redirects\DataSource\CachedDataSource
      */
-    public $refresh = true;
+    protected $dataSource;
+
+    /**
+     * @param \Heyday\Redirects\DataSource\CachedDataSource $dataSource
+     */
+    public function setDataSource(CachedDataSource $dataSource)
+    {
+        $this->dataSource = $dataSource;
+    }
 
     /**
      * @return RequiredFields
@@ -51,9 +54,10 @@ class RedirectUrl extends DataObject implements PermissionProvider
      */
     public function providePermissions()
     {
-        return array(self::PERMISSION => "Manage redirections");
+        return [
+            self::PERMISSION => "Manage redirections"
+        ];
     }
-
 
     /**
      * @param null $member
@@ -106,13 +110,8 @@ class RedirectUrl extends DataObject implements PermissionProvider
     protected function onAfterWrite()
     {
         parent::onAfterWrite();
-
-        // Only refresh if we have created a valid redirect i.e. model admin
-        // creates a redirect as soon as you click create
-        $from = trim($this->From);
-        if (!empty($from) && $this->refresh) {
-            UrlMap::refresh();
-        }
+        
+        $this->dataSource->delete();
     }
 
     /**
@@ -122,18 +121,6 @@ class RedirectUrl extends DataObject implements PermissionProvider
     {
         parent::onAfterDelete();
 
-        UrlMap::refresh();
-    }
-
-    /**
-     * @return DateRangeSearchContext
-     */
-    public function getDefaultSearchContext()
-    {
-        return new DateRangeSearchContext(
-            $this->class,
-            $this->scaffoldSearchFields(),
-            $this->defaultSearchFilters()
-        );
+        $this->dataSource->delete();
     }
 }

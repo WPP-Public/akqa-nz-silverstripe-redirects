@@ -1,0 +1,39 @@
+Injector:
+  RedirectsCache:
+    class: Doctrine\Common\Cache\FilesystemCache
+    constructor:
+      0: '../silverstripe-redirects/cache'
+
+  RedirectUrl:
+    properties:
+      DataSource: %$CachedRedirectUrlDataSource
+
+  RedirectUrlDataList:
+    class: DataList
+    constructor:
+      0: 'RedirectUrl'
+
+  RedirectUrlDataSource:
+    class: Heyday\Redirects\DataSource\DataListDataSource
+    constructor:
+      0: %$RedirectUrlDataList
+      1: %$Heyday\Redirects\Transformer\RedirectUrlTransformer
+      
+  CachedRedirectUrlDataSource:
+    class: Heyday\Redirects\DataSource\CachedDataSource
+    constructor:
+      0: %$RedirectUrlDataList
+      1: %$RedirectsCache
+    
+  Heyday\Redirects\Redirector:
+    constructor:
+      0: %$CachedRedirectUrlDataSource
+
+  Heyday\Redirects\RequestFilter:
+    constructor:
+      0: %$Heyday\Redirects\Redirector
+
+  RequestProcessor:
+    properties:
+      filters:
+        - '%$Heyday\Redirects\RequestFilter'
