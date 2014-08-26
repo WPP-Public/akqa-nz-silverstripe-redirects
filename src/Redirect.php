@@ -56,11 +56,9 @@ class Redirect
      */
     public function match($url)
     {
-        $form = $this->formatUrl($this->from);
-        $current = $this->formatUrl($url);
-        $to = $this->formatUrl($this->to);
-        return $form === $current
-            && $form !== $to;
+        $from = $this->formatUrl($this->from);
+        return $from === $this->formatUrl($url)
+            && $from !== $this->formatUrl($this->to);
     }
 
     /**
