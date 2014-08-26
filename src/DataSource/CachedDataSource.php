@@ -42,6 +42,7 @@ class CachedDataSource implements DataSourceInterface
 
     /**
      * Delete the cached version
+     * @return void
      */
     public function delete()
     {

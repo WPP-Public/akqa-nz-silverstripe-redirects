@@ -38,12 +38,4 @@ class DataListDataSource implements CacheableDataSourceInterface
     {
         return md5($this->list->sql());
     }
-
-    /**
-     * @return bool
-     */
-    public function delete()
-    {
-
-    }
 }
