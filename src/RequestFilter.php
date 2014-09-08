@@ -33,7 +33,7 @@ class RequestFilter implements SilverStripeRequestFilter
      */
     public function preRequest(SS_HTTPRequest $request, Session $session, DataModel $model)
     {
-        if ($response = $this->redirector->getResponse($request)) {
+        if (!\Director::is_cli() && $response = $this->redirector->getResponse($request)) {
             $response->output();
             exit;
         }

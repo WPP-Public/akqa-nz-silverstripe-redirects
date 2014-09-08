@@ -23,9 +23,17 @@ class RedirectUrl extends DataObject implements PermissionProvider
     /**
      * @var array
      */
+    private static $has_one = [
+        'FromRelation' => 'SiteTree',
+        'ToRelation' => 'SiteTree'
+    ];
+
+    /**
+     * @var array
+     */
     private static $summary_fields = [
-        'From',
-        'To'
+        'FromLink',
+        'ToLink'
     ];
 
     /**
@@ -42,11 +50,90 @@ class RedirectUrl extends DataObject implements PermissionProvider
     }
 
     /**
-     * @return RequiredFields
+     * @return FieldList
+     */
+    public function getCMSFields()
+    {
+        $fields = new FieldList();
+
+        $fields->push($manual = new ToggleCompositeField(
+            'TextLinks',
+            'Enter urls',
+            [
+                new TextField('From', 'From url (e.g. "/my-page/")'),
+                new TextField('To', 'To url (e.g. "/my-page/", "http://google.com/")')
+            ]
+        ));
+
+        $fields->push($page = new ToggleCompositeField(
+            'SiteTree',
+            'Select pages from list',
+            [
+                new TreeDropdownField('FromRelationID', 'From', 'SiteTree'),
+                new TreeDropdownField('ToRelationID', 'To', 'SiteTree')
+            ]
+        ));
+
+        if ($this->getField('From') || $this->getField('To')) {
+            $manual->setStartClosed(false);
+        }
+        
+        if ($this->getField('FromRelationID') || $this->getField('ToRelationID')) {
+            $page->setStartClosed(false);
+        }
+        
+        return $fields;
+    }
+
+    /**
+     * @return string|bool
+     */
+    public function getFromLink()
+    {
+        return $this->getLink('From');
+    }
+
+    /**
+     * @return string|bool
+     */
+    public function getToLink()
+    {
+        return $this->getLink('To');
+    }
+
+    /**
+     * @param string $type
+     * @return string|bool
+     */
+    protected function getLink($type)
+    {
+        if (!$relation = $this->getLinkRelation($type)) {
+            return $this->getField($type);
+        }
+
+        return sprintf(
+            "/%s",
+            ltrim($relation->RelativeLink(), '/')
+        );
+    }
+
+    /**
+     * @param string $type
+     * @return bool|SiteTree
+     */
+    protected function getLinkRelation($type)
+    {
+        $relation = $this->getComponent(sprintf("%sRelation", $type));
+        
+        return $relation->exists() ? $relation : false;
+    }
+
+    /**
+     * @return RedirectUrlValidator
      */
     public function getCMSValidator()
     {
-        return new RequiredFields('From', 'To');
+        return new RedirectUrlValidator();
     }
 
     /**
@@ -102,6 +189,30 @@ class RedirectUrl extends DataObject implements PermissionProvider
     protected function hasPermission($member = null)
     {
         return Permission::checkMember($member, self::PERMISSION);
+    }
+
+    /**
+     * Clear out from and to manual links if we have a relation
+     */
+    protected function onBeforeWrite()
+    {
+        parent::onBeforeWrite();
+        
+        if ($this->isChanged('FromRelationID') && $this->getLinkRelation('From')) {
+            $this->setField('From', '');
+        }
+
+        if ($this->isChanged('ToRelationID') && $this->getLinkRelation('To')) {
+            $this->setField('To', '');
+        }
+
+        if ($this->isChanged('From') && $this->getField('From')) {
+            $this->setField('FromRelationID', 0);
+        }
+
+        if ($this->isChanged('To') && $this->getField('To')) {
+            $this->setField('ToRelationID', 0);
+        }
     }
 
     /**
