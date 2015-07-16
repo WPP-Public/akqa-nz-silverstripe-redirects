@@ -1,6 +1,6 @@
 {
 	"name": "heyday/silverstripe-redirects",
-	"description": "DB Mangement of redirects",
+	"description": "DB Management of redirects",
 	"license": "MIT",
 	"authors": [{
 		"name": "Cam Spiers",
