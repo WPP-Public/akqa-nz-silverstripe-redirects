@@ -2,6 +2,10 @@
 
 class RedirectUrlValidator extends Validator
 {
+    /**
+     * @param array $data
+     * @return boolean
+     */
     public function php($data)
     {
         $valid = true;
