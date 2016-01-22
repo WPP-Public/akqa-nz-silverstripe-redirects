@@ -221,8 +221,9 @@ class RedirectUrl extends DataObject implements PermissionProvider
     protected function onAfterWrite()
     {
         parent::onAfterWrite();
-        
-        $this->dataSource->delete();
+        if (isset($this->dataSource)) {
+            $this->dataSource->delete();
+        }
     }
 
     /**
@@ -231,7 +232,8 @@ class RedirectUrl extends DataObject implements PermissionProvider
     protected function onAfterDelete()
     {
         parent::onAfterDelete();
-
-        $this->dataSource->delete();
+        if (isset($this->dataSource)) {
+            $this->dataSource->delete();
+        }
     }
 }
