@@ -9,21 +9,19 @@ class Redirect
 
     /** @var string */
     protected $to;
-    
+
     /** @var int */
-    protected $statusCode = 301;
+    protected $statusCode;
 
     /**
      * @param string $from
      * @param string $to
      */
-    public function __construct($from, $to, $statusCode = null)
+    public function __construct($from, $to, $statusCode)
     {
         $this->from = $from;
         $this->to = $to;
-        if (is_int($statusCode)) {
-            $this->statusCode = $statusCode;
-        }
+        $this->statusCode = $statusCode;
     }
 
     /**
@@ -58,7 +56,7 @@ class Redirect
     {
         $from = $this->formatUrl($this->from);
         return $from === $this->formatUrl($url)
-            && $from !== $this->formatUrl($this->to);
+        && $from !== $this->formatUrl($this->to);
     }
 
     /**

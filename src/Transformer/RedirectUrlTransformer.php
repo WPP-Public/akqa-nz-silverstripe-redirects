@@ -15,7 +15,7 @@ class RedirectUrlTransformer implements TransformerInterface
     public function transform($item)
     {
         if ($item instanceof RedirectUrl) {
-            return new Redirect($item->getFromLink(), $item->getToLink());
+            return new Redirect($item->getFromLink(), $item->getToLink(), $item->getStatusCode());
         } else {
             throw new \InvalidArgumentException(sprintf(
                 "Instance provided to %s::%s must be an instance of RedirectUrl '%s' given",

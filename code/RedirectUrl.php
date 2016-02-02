@@ -17,7 +17,8 @@ class RedirectUrl extends DataObject implements PermissionProvider
      */
     private static $db = [
         'From' => 'Varchar(2560)',
-        'To' => 'Varchar(2560)'
+        'To' => 'Varchar(2560)',
+        'Type' => 'Enum("Permanent,Vanity","Permanent")'
     ];
 
     /**
@@ -33,7 +34,17 @@ class RedirectUrl extends DataObject implements PermissionProvider
      */
     private static $summary_fields = [
         'FromLink',
-        'ToLink'
+        'ToLink',
+        'Type'
+    ];
+
+    /**
+     * @var array
+     */
+    private static $searchable_fields = [
+        'From',
+        'To',
+        'Type'
     ];
 
     /**
@@ -74,6 +85,15 @@ class RedirectUrl extends DataObject implements PermissionProvider
             ]
         ));
 
+        $fields->push(new DropdownField(
+            'Type',
+            'Type',
+            [
+                'Permanent' => 'Permanent',
+                'Vanity' => 'Vanity'
+            ]
+        ));
+
         if ($this->getField('From') || $this->getField('To')) {
             $manual->setStartClosed(false);
         }
@@ -99,6 +119,19 @@ class RedirectUrl extends DataObject implements PermissionProvider
     public function getToLink()
     {
         return $this->getLink('To');
+    }
+
+    /**
+     * Returns the right status code depending on type of redirect.
+     * @return int
+     */
+    public function getStatusCode()
+    {
+        if ($this->Type == 'Permanent') {
+            return 301;
+        } else if ($this->Type == 'Vanity') {
+            return 302;
+        }
     }
 
     /**
