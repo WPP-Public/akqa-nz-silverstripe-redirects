@@ -128,9 +128,9 @@ class RedirectUrl extends DataObject implements PermissionProvider
     public function getStatusCode()
     {
         switch (strtolower($this->Type)) {
-            case 'Permanent':
+            case 'permanent':
                 return 301;
-            case 'Vanity':
+            case 'vanity':
                 return 302;
             default:
                 return 301;
