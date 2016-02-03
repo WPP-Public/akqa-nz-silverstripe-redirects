@@ -16,8 +16,9 @@ class Redirect
     /**
      * @param string $from
      * @param string $to
+     * @param int $statusCode
      */
-    public function __construct($from, $to, $statusCode)
+    public function __construct($from, $to, $statusCode = 301)
     {
         $this->from = $from;
         $this->to = $to;
@@ -45,7 +46,7 @@ class Redirect
      */
     public function getStatusCode()
     {
-        return $this->statusCode;
+        return ((isset($this->statusCode) && !empty($this->statusCode)) ? $this->statusCode : 301);
     }
 
     /**
