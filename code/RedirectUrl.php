@@ -67,12 +67,18 @@ class RedirectUrl extends DataObject implements PermissionProvider
     {
         $fields = new FieldList();
 
+        $from = new TextField('From', 'From');
+        $from->setRightTitle('(e.g "/my-page/")- always include the /');
+        $to = new TextField('To', 'To');
+        $to->setRightTitle('e.g "/my-page/" for internal pages or "http://google.com/" for external websites (and include the scheme - http:// or https://)');
+
         $fields->push($manual = new ToggleCompositeField(
             'TextLinks',
             'Enter urls',
             [
-                new TextField('From', 'From url (e.g. "/my-page/")'),
-                new TextField('To', 'To url (e.g. "/my-page/", "http://google.com/")')
+                $from,
+                $to
+
             ]
         ));
 
@@ -89,8 +95,9 @@ class RedirectUrl extends DataObject implements PermissionProvider
             'Type',
             'Type',
             [
-                'Permanent' => 'Permanent',
-                'Vanity' => 'Vanity'
+                'Vanity' => 'Vanity',
+                'Permanent' => 'Permanent'
+
             ]
         ));
 
