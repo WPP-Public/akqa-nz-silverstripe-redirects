@@ -20,8 +20,8 @@ class Redirect
      */
     public function __construct($from, $to, $statusCode = 301)
     {
-        $this->from = $from;
-        $this->to = $to;
+        $this->from = self::formatUrl($from);
+        $this->to = self::formatUrl($to);
         $this->statusCode = $statusCode;
     }
 
