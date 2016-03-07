@@ -55,16 +55,16 @@ class Redirect
      */
     public function match($url)
     {
-        $from = $this->formatUrl($this->from);
-        return $from === $this->formatUrl($url)
-        && $from !== $this->formatUrl($this->to);
+        $from = self::formatUrl($this->from);
+
+        return (($from === self::formatUrl($url)) && ($from !== self::formatUrl($this->to)));
     }
 
     /**
      * @param string $url
      * @return string
      */
-    public function formatUrl($url)
+    public static function formatUrl($url)
     {
         return trim(
             strtolower($url),
