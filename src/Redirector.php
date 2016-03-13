@@ -21,14 +21,17 @@ class Redirector
      */
     public function getRedirectForRequest(\SS_HTTPRequest $request)
     {
-        $url = $request->getURL();
+        // Format the URL as the key will have been formatted
+        $url = Redirect::formatUrl($request->getURL());
+        $dataSource = $this->dataSource->get();
 
-        foreach ($this->dataSource->get() as $redirect) {
+        // Check if there's a key for the URL
+        if (isset($dataSource[$url])) {
+            $redirect = $dataSource[$url];
             if ($redirect->match($url)) {
                 return $redirect;
             }
         }
-        
         return false;
     }
 
