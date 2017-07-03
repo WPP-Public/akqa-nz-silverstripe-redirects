@@ -33,6 +33,8 @@ class RedirectUrl extends DataObject implements PermissionProvider
      * @var array
      */
     private static $summary_fields = [
+        'Created',
+        'LastEdited',
         'FromLink',
         'ToLink',
         'Type'
@@ -42,9 +44,15 @@ class RedirectUrl extends DataObject implements PermissionProvider
      * @var array
      */
     private static $searchable_fields = [
-        'From',
-        'To',
-        'Type'
+        'From' => [
+            'title' => 'From URL',
+            'type' => 'PartialMatchFilter'
+        ],
+        'To' => [
+            'title' => 'To URL',
+            'type' => 'PartialMatchFilter'
+        ],
+        'Type' => 'PartialMatchFilter'
     ];
 
     /**
@@ -104,11 +112,11 @@ class RedirectUrl extends DataObject implements PermissionProvider
         if ($this->getField('From') || $this->getField('To')) {
             $manual->setStartClosed(false);
         }
-        
+
         if ($this->getField('FromRelationID') || $this->getField('ToRelationID')) {
             $page->setStartClosed(false);
         }
-        
+
         return $fields;
     }
 
@@ -167,7 +175,7 @@ class RedirectUrl extends DataObject implements PermissionProvider
     protected function getLinkRelation($type)
     {
         $relation = $this->getComponent(sprintf("%sRelation", $type));
-        
+
         return $relation->exists() ? $relation : false;
     }
 
@@ -240,7 +248,7 @@ class RedirectUrl extends DataObject implements PermissionProvider
     protected function onBeforeWrite()
     {
         parent::onBeforeWrite();
-        
+
         if ($this->isChanged('FromRelationID') && $this->getLinkRelation('From')) {
             $this->setField('From', '');
         }
@@ -279,4 +287,5 @@ class RedirectUrl extends DataObject implements PermissionProvider
             $this->dataSource->delete();
         }
     }
+
 }
