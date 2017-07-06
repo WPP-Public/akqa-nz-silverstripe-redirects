@@ -49,6 +49,8 @@ class RedirectsModelAdmin extends ModelAdmin
     {
         $context = parent::getSearchContext();
 
+        $context->getFields()->push(new LiteralField('dateinfo', '<h3>Filter between dates</h3>'));
+
         $dateField = new DateField("q[FromDate]", "From Date");
         // Get the DateField portion of the DatetimeField and
         // Explicitly set the desired date format and show a date picker
