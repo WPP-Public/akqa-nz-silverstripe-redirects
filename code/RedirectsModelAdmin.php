@@ -1,7 +1,16 @@
 <?php
 
+namespace Heyday\SilverStripeRedirects\Code;
+
+use SilverStripe\Admin\ModelAdmin;
+use SilverStripe\Forms\DateField;
+use SilverStripe\Forms\Form;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\ORM\Search\SearchContext;
+
 /**
- * @package Heyday\Redirects
+ * Class RedirectsModelAdmin
+ * @package Heyday\SilverStripeRedirects\Code
  */
 class RedirectsModelAdmin extends ModelAdmin
 {
@@ -9,7 +18,7 @@ class RedirectsModelAdmin extends ModelAdmin
      * @var array
      */
     private static $managed_models = [
-        'RedirectUrl'
+        'Heyday\SilverStripeRedirects\Code\RedirectUrl'
     ];
 
     /**
@@ -54,14 +63,18 @@ class RedirectsModelAdmin extends ModelAdmin
         $dateField = new DateField("q[FromDate]", "From Date");
         // Get the DateField portion of the DatetimeField and
         // Explicitly set the desired date format and show a date picker
-        $dateField->setConfig('dateformat', 'dd/MM/yyyy')->setConfig('showcalendar', true);
-        $context->getFields()->push($dateField);
+        $dateField->setDateFormat('dd/MM/yyyy')
+            ->setAttribute('showcalendar', true);
+        $context->getFields()
+            ->push($dateField);
 
         $dateField = new DateField("q[ToDate]", "To Date");
         // Get the DateField portion of the DatetimeField and
         // Explicitly set the desired date format and show a date picker
-        $dateField->setConfig('dateformat', 'dd/MM/yyyy')->setConfig('showcalendar', true);
-        $context->getFields()->push($dateField);
+        $dateField->setDateFormat('dd/MM/yyyy')
+            ->setAttribute('showcalendar', true);
+        $context->getFields()
+            ->push($dateField);
 
         return $context;
     }
@@ -82,9 +95,9 @@ class RedirectsModelAdmin extends ModelAdmin
             //split  date into day month year variables
             list($day, $month, $year) = sscanf($params['ToDate'], "%d/%d/%d");
             //date functions expect US date format, create new date object
-            $date = new Datetime("$month/$day/$year");
+            $date = new \DateTime("$month/$day/$year");
             //create interval of Plus 1 Day (P1D)
-            $interval = new DateInterval('P1D');
+            $interval = new \DateInterval('P1D');
             //add interval to the date
             $date->add($interval);
             //use the new date value as the GreaterThan exclusion filter

@@ -1,12 +1,12 @@
 <?php
 
-namespace Heyday\Redirects;
+namespace Heyday\SilverStripeRedirects\Source;
 
 interface TransformerInterface
 {
     /**
      * @param mixed $item
-     * @return \Heyday\Redirects\Redirect
+     * @return \Heyday\SilverStripeRedirects\Source\Redirect
      */
     public function transform($item);
 }

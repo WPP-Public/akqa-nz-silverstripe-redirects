@@ -1,7 +1,11 @@
 <?php
 
-namespace Heyday\Redirects;
+namespace Heyday\SilverStripeRedirects\Source;
 
+/**
+ * Class Redirect
+ * @package Heyday\SilverStripeRedirects\Source
+ */
 class Redirect
 {
     /** @var string */

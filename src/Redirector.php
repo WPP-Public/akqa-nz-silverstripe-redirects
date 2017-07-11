@@ -1,14 +1,21 @@
 <?php
 
-namespace Heyday\Redirects;
+namespace Heyday\SilverStripeRedirects\Source;
 
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Control\HTTPResponse;
+
+/**
+ * Class Redirector
+ * @package Heyday\SilverStripeRedirects\Source
+ */
 class Redirector
 {
-    /** @var \Heyday\Redirects\DataSourceInterface */
+    /** @var \Heyday\SilverStripeRedirects\Source\DataSourceInterface */
     protected $dataSource;
 
     /**
-     * @param \Heyday\Redirects\DataSourceInterface $dataSource
+     * @param \Heyday\SilverStripeRedirects\Source\DataSourceInterface $dataSource
      */
     public function __construct(DataSourceInterface $dataSource)
     {
@@ -16,10 +23,10 @@ class Redirector
     }
 
     /**
-     * @param \SS_HTTPRequest $request
-     * @return \Heyday\Redirects\Redirect
+     * @param HTTPRequest $request
+     * @return \Heyday\SilverStripeRedirects\Source\Redirect
      */
-    public function getRedirectForRequest(\SS_HTTPRequest $request)
+    public function getRedirectForRequest(HTTPRequest $request)
     {
         // Format the URL as the key will have been formatted
         $url = Redirect::formatUrl($request->getURL());
@@ -36,13 +43,13 @@ class Redirector
     }
 
     /**
-     * @param \SS_HTTPRequest $request
-     * @return null|\SS_HTTPResponse
+     * @param HTTPRequest $request
+     * @return null|HTTPResponse
      */
-    public function getResponse(\SS_HTTPRequest $request)
+    public function getResponse(HTTPRequest $request)
     {
         if ($redirect = $this->getRedirectForRequest($request)) {
-            $response = new \SS_HTTPResponse();
+            $response = new HTTPResponse();
             $response->redirect($redirect->getTo(), $redirect->getStatusCode());
             
             return $response;

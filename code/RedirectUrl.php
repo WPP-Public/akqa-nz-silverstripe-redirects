@@ -1,9 +1,19 @@
 <?php
+namespace Heyday\SilverStripeRedirects\Code;
 
-use Heyday\Redirects\DataSource\CachedDataSource;
+use Heyday\SilverStripeRedirects\Source\DataSource\CachedDataSource;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\ToggleCompositeField;
+use SilverStripe\Forms\TreeDropdownField;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Security\Permission;
+use SilverStripe\Security\PermissionProvider;
 
 /**
- * @package Heyday\Redirects
+ * Class RedirectUrl
+ * @package Heyday\SilverStripeRedirects\Code
  */
 class RedirectUrl extends DataObject implements PermissionProvider
 {
@@ -33,11 +43,11 @@ class RedirectUrl extends DataObject implements PermissionProvider
      * @var array
      */
     private static $summary_fields = [
-        'Created',
-        'LastEdited',
-        'FromLink',
-        'ToLink',
-        'Type'
+        'Created' => 'Created',
+        'LastEdited.Nice' => 'Last Edited',
+        'FromLink' => 'From Link',
+        'ToLink' => 'To Link',
+        'Type' => 'Type'
     ];
 
     /**
@@ -56,12 +66,12 @@ class RedirectUrl extends DataObject implements PermissionProvider
     ];
 
     /**
-     * @var \Heyday\Redirects\DataSource\CachedDataSource
+     * @var CachedDataSource
      */
     protected $dataSource;
 
     /**
-     * @param \Heyday\Redirects\DataSource\CachedDataSource $dataSource
+     * @param CachedDataSource $dataSource
      */
     public function setDataSource(CachedDataSource $dataSource)
     {
@@ -208,9 +218,10 @@ class RedirectUrl extends DataObject implements PermissionProvider
 
     /**
      * @param null $member
+     * @param array $context
      * @return bool|int
      */
-    public function canCreate($member = null)
+    public function canCreate($member = null, $context = [])
     {
         return $this->hasPermission($member);
     }

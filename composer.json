@@ -9,7 +9,8 @@
 	"type": "silverstripe-module",
 	"autoload": {
 		"psr-4": {
-			"Heyday\\Redirects\\": "src/"
+			"Heyday\\Redirects\\Code": "code/",
+			"Heyday\\Redirects\\Source": "src/"
 		}
 	},
 	"extra": {

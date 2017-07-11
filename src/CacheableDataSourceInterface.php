@@ -1,9 +1,9 @@
 <?php
 
-namespace Heyday\Redirects;
+namespace Heyday\SilverStripeRedirects\Source;
 
 /**
- * @package Heyday\Redirects
+ * @package Heyday\SilverStripeRedirects\Source
  */
 interface CacheableDataSourceInterface extends DataSourceInterface
 {

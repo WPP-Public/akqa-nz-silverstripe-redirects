@@ -1,18 +1,19 @@
 <?php
 
-namespace Heyday\Redirects\DataSource;
+namespace Heyday\RSilverStripeRedirects\Source\DataSource;
 
-use Heyday\Redirects\DataSourceInterface;
+use Heyday\SilverStripeRedirects\Source\DataSourceInterface;
+use Heyday\SilverStripeRedirects\Source\Redirect;
 
 class GroupedDataSource implements DataSourceInterface
 {
     /**
-     * @var \Heyday\Redirects\DataSourceInterface[]
+     * @var DataSourceInterface[]
      */
     protected $dataSources = [];
 
     /**
-     * @param \Heyday\Redirects\DataSourceInterface[] $dataSources
+     * @param DataSourceInterface[] $dataSources
      */
     public function __construct(array $dataSources)
     {
@@ -20,7 +21,7 @@ class GroupedDataSource implements DataSourceInterface
     }
 
     /**
-     * @return \Heyday\Redirects\Redirect[]
+     * @return Redirect[]
      */
     public function get()
     {

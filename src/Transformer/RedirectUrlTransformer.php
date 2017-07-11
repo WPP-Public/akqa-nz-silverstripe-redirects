@@ -1,10 +1,10 @@
 <?php
 
-namespace Heyday\Redirects\Transformer;
+namespace Heyday\SilverStripeRedirects\Source\Transformer;
 
-use Heyday\Redirects\Redirect;
-use RedirectUrl;
-use Heyday\Redirects\TransformerInterface;
+use Heyday\SilverStripeRedirects\Source\Redirect;
+use Heyday\SilverStripeRedirects\Code\RedirectUrl;
+use Heyday\SilverStripeRedirects\Source\TransformerInterface;
 
 class RedirectUrlTransformer implements TransformerInterface
 {

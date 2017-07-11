@@ -1,4 +1,7 @@
 <?php
+namespace Heyday\SilverStripeRedirects\Code;
+
+use SilverStripe\Forms\Validator;
 
 class RedirectUrlValidator extends Validator
 {

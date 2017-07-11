@@ -1,24 +1,25 @@
 <?php
 
-namespace Heyday\Redirects\DataSource;
+namespace Heyday\SilverStripeRedirects\Source\DataSource;
 
-use Heyday\Redirects\CacheableDataSourceInterface;
-use Heyday\Redirects\Redirect;
-use Heyday\Redirects\TransformerInterface;
+use Heyday\SilverStripeRedirects\Source\CacheableDataSourceInterface;
+use Heyday\SilverStripeRedirects\Source\Redirect;
+use Heyday\SilverStripeRedirects\Source\TransformerInterface;
+use SilverStripe\ORM\DataList;
 
 class DataListDataSource implements CacheableDataSourceInterface
 {
-    /** @var \DataList */
+    /** @var DataList */
     protected $list;
 
-    /** @var \Heyday\Redirects\TransformerInterface */
+    /** @var TransformerInterface */
     protected $transformer;
 
     /**
-     * @param \DataList $list
-     * @param \Heyday\Redirects\TransformerInterface $transformer
+     * @param DataList $list
+     * @param TransformerInterface $transformer
      */
-    public function __construct(\DataList $list, TransformerInterface $transformer)
+    public function __construct(DataList $list, TransformerInterface $transformer)
     {
         $this->list = $list;
         $this->transformer = $transformer;
@@ -29,13 +30,13 @@ class DataListDataSource implements CacheableDataSourceInterface
      *      an associative array (keyed on the 'from' URL) is generated which allows a direct check rather than needing
      *      to iterate through a large list (especially considering this would be done on each page request).
      *
-     * @return \Heyday\Redirects\Redirect[]
+     * @return Redirect[]
      */
     public function get()
     {
         $data = array();
 
-        /* @var \Heyday\Redirects\Redirect $redirect */
+        /* @var Redirect $redirect */
         foreach (array_map([$this->transformer, 'transform'], $this->list->toArray()) as $redirect) {
             // Format the URL so it will match the SS_HTTPRequest request URL
             $data[Redirect::formatUrl($redirect->getFrom())] = $redirect;

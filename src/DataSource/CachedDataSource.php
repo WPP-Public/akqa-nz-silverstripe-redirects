@@ -1,20 +1,21 @@
 <?php
 
-namespace Heyday\Redirects\DataSource;
+namespace Heyday\SilverStripeRedirects\Source\DataSource;
 
-use Heyday\Redirects\CacheableDataSourceInterface;
-use Heyday\Redirects\DataSourceInterface;
+
+use Heyday\SilverStripeRedirects\Source\DataSourceInterface;
+use Heyday\SilverStripeRedirects\Source\CacheableDataSourceInterface;
 
 class CachedDataSource implements DataSourceInterface
 {
-    /** @var \Heyday\Redirects\CacheableDataSourceInterface */
+    /** @var \Heyday\SilverStripeRedirects\Source\CacheableDataSourceInterface */
     protected $dataSource;
     
     /** @var \Doctrine\Common\Cache\CacheProvider */
     protected $cache;
 
     /**
-     * @param \Heyday\Redirects\CacheableDataSourceInterface $dataSource
+     * @param CacheableDataSourceInterface $dataSource
      * @param \Doctrine\Common\Cache\CacheProvider $cache
      */
     public function __construct(CacheableDataSourceInterface $dataSource, $cache)
@@ -24,7 +25,7 @@ class CachedDataSource implements DataSourceInterface
     }
 
     /**
-     * @return \Heyday\Redirects\Redirect[]
+     * @return \Heyday\SilverStripeRedirects\Source\Redirect[]
      */
     public function get()
     {

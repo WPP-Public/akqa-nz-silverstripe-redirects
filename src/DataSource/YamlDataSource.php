@@ -1,9 +1,9 @@
 <?php
 
-namespace Heyday\Redirects\DataSource;
+namespace Heyday\SilverStripeRedirects\Source\DataSource;
 
-use Heyday\Redirects\DataSourceInterface;
-use Heyday\Redirects\Redirect;
+use Heyday\SilverStripeRedirects\Source\DataSourceInterface;
+use Heyday\SilverStripeRedirects\Source\Redirect;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlDataSource implements DataSourceInterface
@@ -12,7 +12,7 @@ class YamlDataSource implements DataSourceInterface
     protected $file;
 
     /**
-     * @return \Heyday\Redirects\Redirect[]
+     * @return Redirect[]
      */
     public function get()
     {
