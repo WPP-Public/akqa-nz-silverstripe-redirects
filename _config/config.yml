@@ -4,36 +4,38 @@ Injector:
     constructor:
       0: '../silverstripe-redirects/cache'
 
-  RedirectUrl:
+  RedirectUrlDataSource:
+    class: Heyday\SilverStripeRedirects\Source\DataSource\DataListDataSource
+    constructor:
+      0: %$RedirectUrlDataList
+      1: %$Heyday\SilverStripeRedirects\Source\Transformer\RedirectUrlTransformer
+
+  CachedRedirectUrlDataSource:
+    class: Heyday\SilverStripeRedirects\Source\DataSource\CachedDataSource
+    constructor:
+      0: %$RedirectUrlDataSource
+      1: %$RedirectsCache
+
+  Heyday\SilverStripeRedirects\Code\RedirectUrl:
     properties:
       DataSource: %$CachedRedirectUrlDataSource
 
   RedirectUrlDataList:
-    class: DataList
+    class: SilverStripe\ORM\DataList
     constructor:
-      0: 'RedirectUrl'
+      0: 'Heyday\SilverStripeRedirects\Code\RedirectUrl'
 
-  RedirectUrlDataSource:
-    class: Heyday\Redirects\DataSource\DataListDataSource
-    constructor:
-      0: %$RedirectUrlDataList
-      1: %$Heyday\Redirects\Transformer\RedirectUrlTransformer
-      
-  CachedRedirectUrlDataSource:
-    class: Heyday\Redirects\DataSource\CachedDataSource
-    constructor:
-      0: %$RedirectUrlDataSource
-      1: %$RedirectsCache
+
     
-  Heyday\Redirects\Redirector:
+  Heyday\SilverStripeRedirects\Source\Redirector:
     constructor:
       0: %$CachedRedirectUrlDataSource
 
-  Heyday\Redirects\RequestFilter:
+  Heyday\SilverStripeRedirects\Source\RequestFilter:
     constructor:
-      0: %$Heyday\Redirects\Redirector
+      0: %$Redirector
 
   RequestProcessor:
     properties:
       filters:
-        - '%$Heyday\Redirects\RequestFilter'
+        - '%$Heyday\SilverStripeRedirects\Source\RequestFilter'

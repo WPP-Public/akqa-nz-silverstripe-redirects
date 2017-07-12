@@ -1,9 +1,12 @@
 <?php
+
 namespace Heyday\SilverStripeRedirects\Code;
 
 use Heyday\SilverStripeRedirects\Source\DataSource\CachedDataSource;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\ToggleCompositeField;
 use SilverStripe\Forms\TreeDropdownField;
@@ -35,8 +38,8 @@ class RedirectUrl extends DataObject implements PermissionProvider
      * @var array
      */
     private static $has_one = [
-        'FromRelation' => 'SiteTree',
-        'ToRelation' => 'SiteTree'
+        'FromRelation' => 'SilverStripe\CMS\Model\SiteTree',
+        'ToRelation' => 'SilverStripe\CMS\Model\SiteTree'
     ];
 
     /**
@@ -66,6 +69,17 @@ class RedirectUrl extends DataObject implements PermissionProvider
     ];
 
     /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        $from = $this->getFromLink();
+        $to = $this->getToLink();
+
+        return "From \"$from\" to \"$to\"";
+    }
+
+    /**
      * @var CachedDataSource
      */
     protected $dataSource;
@@ -84,6 +98,12 @@ class RedirectUrl extends DataObject implements PermissionProvider
     public function getCMSFields()
     {
         $fields = new FieldList();
+        $fields->push(
+            new LiteralField(
+                'Explanation',
+                "<p>Pages selected from the list have precedence over manually entered URLs. A Vanity redirect is temporary(HTTP 302). A permanent is a HTTP 301.</p>"
+            )
+        );
 
         $from = new TextField('From', 'From');
         $from->setRightTitle('(e.g "/my-page/")- always include the /');
@@ -104,8 +124,8 @@ class RedirectUrl extends DataObject implements PermissionProvider
             'SiteTree',
             'Select pages from list',
             [
-                new TreeDropdownField('FromRelationID', 'From', 'SiteTree'),
-                new TreeDropdownField('ToRelationID', 'To', 'SiteTree')
+                new TreeDropdownField('FromRelationID', 'From', 'SilverStripe\CMS\Model\SiteTree'),
+                new TreeDropdownField('ToRelationID', 'To', 'SilverStripe\CMS\Model\SiteTree')
             ]
         ));
 
@@ -258,6 +278,7 @@ class RedirectUrl extends DataObject implements PermissionProvider
      */
     protected function onBeforeWrite()
     {
+       $te3st = Injector::inst()->get('Heyday\SilverStripeRedirects\Code\RedirectUrl');
         parent::onBeforeWrite();
 
         if ($this->isChanged('FromRelationID') && $this->getLinkRelation('From')) {
