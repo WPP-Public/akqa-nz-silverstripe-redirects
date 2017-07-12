@@ -28,5 +28,7 @@
 	},
 	"suggest": {
 		"symfony/yaml": "Add this Yaml library to be able to use Yaml sources"
-	}
+	},
+   	"prefer-stable": true,
+    	"minimum-stability": "dev"
 }
