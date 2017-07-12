@@ -33,7 +33,7 @@ SilverStripe\Core\Injector\Injector:
     constructor:
       0: %$Heyday\SilverStripeRedirects\Source\Redirector
 
-  RequestProcessor:
+  SilverStripe\Control\RequestProcessor:
     properties:
       filters:
         - '%$Heyday\SilverStripeRedirects\Source\RequestFilter'
