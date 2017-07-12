@@ -278,7 +278,6 @@ class RedirectUrl extends DataObject implements PermissionProvider
      */
     protected function onBeforeWrite()
     {
-       $te3st = Injector::inst()->get('Heyday\SilverStripeRedirects\Code\RedirectUrl');
         parent::onBeforeWrite();
 
         if ($this->isChanged('FromRelationID') && $this->getLinkRelation('From')) {

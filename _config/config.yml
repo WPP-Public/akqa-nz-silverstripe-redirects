@@ -1,4 +1,4 @@
-Injector:
+SilverStripe\Core\Injector\Injector:
   RedirectsCache:
     class: Doctrine\Common\Cache\FilesystemCache
     constructor:
@@ -18,22 +18,20 @@ Injector:
 
   Heyday\SilverStripeRedirects\Code\RedirectUrl:
     properties:
-      DataSource: %$CachedRedirectUrlDataSource
+      dataSource: %$CachedRedirectUrlDataSource
 
   RedirectUrlDataList:
     class: SilverStripe\ORM\DataList
     constructor:
       0: 'Heyday\SilverStripeRedirects\Code\RedirectUrl'
 
-
-    
   Heyday\SilverStripeRedirects\Source\Redirector:
     constructor:
       0: %$CachedRedirectUrlDataSource
 
   Heyday\SilverStripeRedirects\Source\RequestFilter:
     constructor:
-      0: %$Redirector
+      0: %$Heyday\SilverStripeRedirects\Source\Redirector
 
   RequestProcessor:
     properties:
