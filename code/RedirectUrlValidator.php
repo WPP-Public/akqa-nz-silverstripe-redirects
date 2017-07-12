@@ -1,4 +1,5 @@
 <?php
+
 namespace Heyday\SilverStripeRedirects\Code;
 
 use SilverStripe\Forms\Validator;
@@ -13,28 +14,46 @@ class RedirectUrlValidator extends Validator
     {
         $valid = true;
 
-        if (empty($data['From']) && empty($data['FromRelationID'])) {
-            foreach (['From', 'FromRelationID'] as $error) {
-                $this->validationError(
-                    $error,
-                    "A 'From' url must be specified",
-                    "required"
-                );
-            }
-            $valid = false;
-        }
-
-        if (empty($data['To']) && empty($data['ToRelationID'])) {
-            foreach (['To', 'ToRelationID'] as $error) {
-                $this->validationError(
-                    $error,
-                    "A 'To' url must be specified",
-                    "required"
-                );
-            }
+        if ($data['FromType'] == 'page' && $data['FromRelationID'] == 0) {
+            $this->validationError(
+                'FromRelationID',
+                "A 'From' page must be specified",
+                "required"
+            );
             $valid = false;
         }
         
+        if ($data['FromType'] == 'manual' && empty($data['From'])) {
+            $this->validationError(
+                'From',
+                "A 'From' url must be specified",
+                "required"
+            );
+            $valid = false;
+        }
+        
+        if ($data['ToType'] == 'page' && $data['ToRelationID'] == 0) {
+            $this->validationError(
+                'ToRelationID',
+                "A 'To' page must be specified",
+                "required"
+            );
+            $valid = false;
+        }
+        
+        if ($data['ToType'] == 'manual' && empty($data['To'])) {
+            $this->validationError(
+                'To',
+                "A 'To' url must be specified",
+                "required"
+            );
+            $valid = false;
+        }
+
+
+
         return $valid;
+
+
     }
 }

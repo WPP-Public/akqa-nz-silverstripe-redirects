@@ -3,14 +3,16 @@
 namespace Heyday\SilverStripeRedirects\Code;
 
 use Heyday\SilverStripeRedirects\Source\DataSource\CachedDataSource;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\ToggleCompositeField;
 use SilverStripe\Forms\TreeDropdownField;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
 
@@ -98,54 +100,72 @@ class RedirectUrl extends DataObject implements PermissionProvider
     public function getCMSFields()
     {
         $fields = new FieldList();
-        $fields->push(
-            new LiteralField(
-                'Explanation',
-                "<p>Pages selected from the list have precedence over manually entered URLs. A Vanity redirect is temporary(HTTP 302). A permanent is a HTTP 301.</p>"
-            )
-        );
-
-        $from = new TextField('From', 'From');
-        $from->setRightTitle('(e.g "/my-page/")- always include the /');
-        $to = new TextField('To', 'To');
-        $to->setRightTitle('e.g "/my-page/" for internal pages or "http://google.com/" for external websites (and include the scheme - http:// or https://)');
-
-        $fields->push($manual = new ToggleCompositeField(
-            'TextLinks',
-            'Enter urls',
-            [
-                $from,
-                $to
-
-            ]
-        ));
-
-        $fields->push($page = new ToggleCompositeField(
-            'SiteTree',
-            'Select pages from list',
-            [
-                new TreeDropdownField('FromRelationID', 'From', 'SilverStripe\CMS\Model\SiteTree'),
-                new TreeDropdownField('ToRelationID', 'To', 'SilverStripe\CMS\Model\SiteTree')
-            ]
-        ));
 
         $fields->push(new DropdownField(
             'Type',
-            'Type',
+            'Type of redirect',
             [
-                'Vanity' => 'Vanity',
-                'Permanent' => 'Permanent'
+                'Vanity' => 'Vanity (302)',
+                'Permanent' => 'Permanent (301)'
 
             ]
         ));
 
-        if ($this->getField('From') || $this->getField('To')) {
-            $manual->setStartClosed(false);
-        }
+        /**
+         * FROM
+         */
+        $fromTitle = new HeaderField('FromTitle', 'FROM');
+        $fromExplanation = new LiteralField(
+            'FromExplanation',
+            "<p>Please either enter a url by choosing 'manual' or select a page and choose the type 'page'</p>"
+        );
+        $fromType = new OptionsetField(
+            'FromType',
+            'Type',
+            [
+                'manual' => 'manual',
+                'page' => 'page'
+            ],
+            $this->FromRelationID == 0 ? 'manual' : 'page'
+        );
+        $from = new TextField('From', 'From (manual)');
+        $from->setDescription('(e.g "/my-page/")- always include the /');
+        $fromPage = new TreeDropdownField('FromRelationID', 'From (page)', 'SilverStripe\CMS\Model\SiteTree');
 
-        if ($this->getField('FromRelationID') || $this->getField('ToRelationID')) {
-            $page->setStartClosed(false);
-        }
+        $fields->push($fromTitle);
+        $fields->push($fromExplanation);
+        $fields->push($fromType);
+        $fields->push($from);
+        $fields->push($fromPage);
+
+        /**
+         * TO
+         */
+
+        $toTitle = new HeaderField('ToTitle', 'TO');
+        $toExplanation = new LiteralField(
+            'ToExplanation',
+            "<p>Please either enter a url by choosing 'manual' or select a page and choose the type 'page'</p>"
+        );
+        $toType = new OptionsetField(
+            'ToType',
+            'Type',
+            [
+                'manual' => 'manual',
+                'page' => 'page'
+            ],
+            $this->ToRelationID == 0 ? 'manual' : 'page'
+        );
+        $to = new TextField('To', 'To (manual)');
+        $to->setDescription('e.g "/my-page/" for internal pages or "http://google.com/" for external websites (and include the scheme - http:// or https://)');
+        $toPage = new TreeDropdownField('ToRelationID', 'To (page)', 'SilverStripe\CMS\Model\SiteTree');
+
+        $fields->push($toTitle);
+        $fields->push($toExplanation);
+        $fields->push($toType);
+        $fields->push($to);
+        $fields->push($toPage);
+
 
         return $fields;
     }
@@ -273,6 +293,7 @@ class RedirectUrl extends DataObject implements PermissionProvider
         return Permission::checkMember($member, self::PERMISSION);
     }
 
+
     /**
      * Clear out from and to manual links if we have a relation
      */
@@ -280,19 +301,15 @@ class RedirectUrl extends DataObject implements PermissionProvider
     {
         parent::onBeforeWrite();
 
-        if ($this->isChanged('FromRelationID') && $this->getLinkRelation('From')) {
+        if ($this->FromType == 'page') {
             $this->setField('From', '');
-        }
-
-        if ($this->isChanged('ToRelationID') && $this->getLinkRelation('To')) {
-            $this->setField('To', '');
-        }
-
-        if ($this->isChanged('From') && $this->getField('From')) {
+        } elseif ($this->FromType == 'manual') {
             $this->setField('FromRelationID', 0);
         }
 
-        if ($this->isChanged('To') && $this->getField('To')) {
+        if ($this->ToType == 'page') {
+            $this->setField('To', '');
+        } elseif ($this->ToType == 'manual') {
             $this->setField('ToRelationID', 0);
         }
     }
