@@ -24,6 +24,11 @@ class RedirectUrl extends DataObject implements PermissionProvider
      * Permission for managing redirects
      */
     const PERMISSION = 'MANAGE_REDIRECTS';
+    
+    /**
+     * @var string
+     */
+    private static $table_name = 'RedirectUrl';
 
     /**
      * @var array
