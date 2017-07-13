@@ -3,12 +3,15 @@
 namespace Heyday\SilverStripeRedirects\Source;
 
 use SilverStripe\Control\Director;
-use SilverStripe\ORM\DataModel;
 use SilverStripe\Control\RequestFilter as SilverStripeRequestFilter;
-use SilverStripe\Control\Session;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 
+/**
+ * TODO use HTTP Middleware instead of RequestFilter as it is deprecated
+ * Class RequestFilter
+ * @package Heyday\SilverStripeRedirects\Source
+ */
 class RequestFilter implements SilverStripeRequestFilter
 {
     /**
@@ -28,11 +31,9 @@ class RequestFilter implements SilverStripeRequestFilter
      * Filter executed before a request processes
      *
      * @param HTTPRequest $request Request container object
-     * @param Session $session Request session
-     * @param DataModel $model Current DataModel
      * @return boolean Whether to continue processing other filters. Null or true will continue processing (optional)
      */
-    public function preRequest(HTTPRequest $request, Session $session, DataModel $model)
+    public function preRequest(HTTPRequest $request)
     {
         if (!Director::is_cli() && $response = $this->redirector->getResponse($request)) {
             $response->output();
@@ -44,11 +45,10 @@ class RequestFilter implements SilverStripeRequestFilter
      * Filter executed AFTER a request
      *
      * @param HTTPRequest $request Request container object
-     * @param HTTPResponse $response Response output object
-     * @param DataModel $model Current DataModel
+     * @param HTTPResponse $response
      * @return boolean Whether to continue processing other filters. Null or true will continue processing (optional)
      */
-    public function postRequest(HTTPRequest $request, HTTPResponse $response, DataModel $model)
+    public function postRequest(HTTPRequest $request, HTTPResponse $response)
     {
         //NOOP
     }
