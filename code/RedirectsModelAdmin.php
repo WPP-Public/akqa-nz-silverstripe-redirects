@@ -30,6 +30,12 @@ class RedirectsModelAdmin extends ModelAdmin
      * @var string
      */
     private static $menu_title = 'Redirects';
+    
+    
+    /**
+     * @var string
+     */
+    private static $menu_icon_class = 'font-icon-link';
 
     /**
      * @param null $id
