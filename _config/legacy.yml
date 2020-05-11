@@ -1,5 +1,5 @@
 ---
-Name: cmslegacy
+Name: redirectslegacy
 ---
 SilverStripe\ORM\DatabaseAdmin:
   classname_value_remapping:
