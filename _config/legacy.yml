@@ -1,0 +1,9 @@
+---
+Name: cmslegacy
+---
+SilverStripe\ORM\DatabaseAdmin:
+  classname_value_remapping:
+    RedirectUrl: 'Heyday\SilverStripeRedirects\Code\RedirectUrl'
+
+Heyday\SilverStripeRedirects\Code\RedirectUrl:
+  table_name: RedirectUrl
