@@ -31,6 +31,8 @@ class RedirectUrl extends DataObject implements PermissionProvider
      */
     private static $table_name = 'RedirectUrl';
 
+    private static $singular_name = 'Redirect';
+
     /**
      * @var array
      */
@@ -54,8 +56,8 @@ class RedirectUrl extends DataObject implements PermissionProvider
     private static $summary_fields = [
         'Created' => 'Created',
         'LastEdited.Nice' => 'Last Edited',
-        'FromLink' => 'From Link',
-        'ToLink' => 'To Link',
+        'FromLink' => 'From',
+        'ToLink' => 'To',
         'Type' => 'Type'
     ];
 
