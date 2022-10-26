@@ -3,7 +3,7 @@ Name: redirectslegacy
 ---
 SilverStripe\ORM\DatabaseAdmin:
   classname_value_remapping:
-    RedirectUrl: 'Heyday\SilverStripeRedirects\Code\RedirectUrl'
-
-Heyday\SilverStripeRedirects\Code\RedirectUrl:
+    RedirectUrl: 'Heyday\SilverStripeRedirects\Source\RedirectUrl'
+    'Heyday\SilverStripeRedirects\Code\RedirectUrl': 'Heyday\SilverStripeRedirects\Source\RedirectUrl'
+Heyday\SilverStripeRedirects\Source\RedirectUrl:
   table_name: RedirectUrl

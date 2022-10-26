@@ -3,7 +3,7 @@
 namespace Heyday\SilverStripeRedirects\Source\Transformer;
 
 use Heyday\SilverStripeRedirects\Source\Redirect;
-use Heyday\SilverStripeRedirects\Code\RedirectUrl;
+use Heyday\SilverStripeRedirects\Source\RedirectUrl;
 use Heyday\SilverStripeRedirects\Source\TransformerInterface;
 
 class RedirectUrlTransformer implements TransformerInterface

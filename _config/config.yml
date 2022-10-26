@@ -1,9 +1,7 @@
+---
+Name: redirects
+---
 SilverStripe\Core\Injector\Injector:
-  RedirectsCache:
-    class: Doctrine\Common\Cache\FilesystemCache
-    constructor:
-      0: '../silverstripe-redirects/cache'
-
   RedirectUrlDataSource:
     class: Heyday\SilverStripeRedirects\Source\DataSource\DataListDataSource
     constructor:
@@ -14,16 +12,15 @@ SilverStripe\Core\Injector\Injector:
     class: Heyday\SilverStripeRedirects\Source\DataSource\CachedDataSource
     constructor:
       0: '%$RedirectUrlDataSource'
-      1: '%$RedirectsCache'
 
-  Heyday\SilverStripeRedirects\Code\RedirectUrl:
+  Heyday\SilverStripeRedirects\Source\RedirectUrl:
     properties:
       dataSource: '%$CachedRedirectUrlDataSource'
 
   RedirectUrlDataList:
     class: SilverStripe\ORM\DataList
     constructor:
-      0: 'Heyday\SilverStripeRedirects\Code\RedirectUrl'
+      0: 'Heyday\SilverStripeRedirects\Source\RedirectUrl'
 
   Heyday\SilverStripeRedirects\Source\Redirector:
     constructor:
@@ -33,7 +30,17 @@ SilverStripe\Core\Injector\Injector:
     constructor:
       0: '%$Heyday\SilverStripeRedirects\Source\Redirector'
 
-  SilverStripe\Control\RequestProcessor:
+  Psr\SimpleCache\CacheInterface.redirectsCache:
+    factory: SilverStripe\Core\Cache\CacheFactory
+    constructor:
+      namespace: "redirectsCache"
+---
+Name: redirects-processing
+After:
+  - requestprocessors
+---
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\Control\Director:
     properties:
-      filters:
-        - '%$Heyday\SilverStripeRedirects\Source\RequestFilter'
+      Middlewares:
+        RedirectMiddleware: '%$Heyday\SilverStripeRedirects\Source\RequestFilter'

@@ -1,6 +1,6 @@
 <?php
 
-namespace Heyday\SilverStripeRedirects\Code;
+namespace Heyday\SilverStripeRedirects\Source;
 
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Forms\DateField;
@@ -10,7 +10,7 @@ use SilverStripe\ORM\Search\SearchContext;
 
 /**
  * Class RedirectsModelAdmin
- * @package Heyday\SilverStripeRedirects\Code
+ * @package Heyday\SilverStripeRedirects\Source
  */
 class RedirectsModelAdmin extends ModelAdmin
 {
@@ -18,24 +18,24 @@ class RedirectsModelAdmin extends ModelAdmin
      * @var array
      */
     private static $managed_models = [
-        'Heyday\SilverStripeRedirects\Code\RedirectUrl'
+        RedirectUrl::class
     ];
 
     /**
      * @var string
      */
-    private static $url_segment = 'redirects-management';
+    private static $url_segment = 'redirects';
 
     /**
      * @var string
      */
     private static $menu_title = 'Redirects';
-    
-    
+
+
     /**
      * @var string
      */
-    private static $menu_icon_class = 'font-icon-link';
+    private static $menu_icon_class = 'font-icon-p-redirect';
 
     /**
      * @param null $id

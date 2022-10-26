@@ -2,26 +2,26 @@
 
 namespace Heyday\SilverStripeRedirects\Source\DataSource;
 
-
 use Heyday\SilverStripeRedirects\Source\DataSourceInterface;
 use Heyday\SilverStripeRedirects\Source\CacheableDataSourceInterface;
+use Psr\SimpleCache\CacheInterface;
+use SilverStripe\Core\Injector\Injector;
 
 class CachedDataSource implements DataSourceInterface
 {
     /** @var \Heyday\SilverStripeRedirects\Source\CacheableDataSourceInterface */
     protected $dataSource;
-    
-    /** @var \Doctrine\Common\Cache\CacheProvider */
+
+    /** @var CacheInterface */
     protected $cache;
 
     /**
      * @param CacheableDataSourceInterface $dataSource
-     * @param \Doctrine\Common\Cache\CacheProvider $cache
      */
-    public function __construct(CacheableDataSourceInterface $dataSource, $cache)
+    public function __construct(CacheableDataSourceInterface $dataSource)
     {
         $this->dataSource = $dataSource;
-        $this->cache = $cache;
+        $this->cache = Injector::inst()->get(CacheInterface::class . '.redirectsCache');
     }
 
     /**
@@ -31,11 +31,13 @@ class CachedDataSource implements DataSourceInterface
     {
         $key = $this->dataSource->getKey();
 
-        if (!$result = $this->cache->fetch($key)) {
-            $this->cache->save(
+        if (!$this->cache->has($key)) {
+            $this->cache->set(
                 $key,
                 $result = $this->dataSource->get()
             );
+        } else {
+            $result = $this->cache->get($key);
         }
 
         return $result;
@@ -47,6 +49,6 @@ class CachedDataSource implements DataSourceInterface
      */
     public function delete()
     {
-        $this->cache->delete($this->dataSource->getKey());
+        $this->cache->clear();
     }
 }

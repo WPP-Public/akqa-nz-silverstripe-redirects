@@ -7,4 +7,6 @@ The latest version only supports SilverStripe 4, see the `1.0` branch for a Silv
 
 ## Installation (composer required)
 
-	$ composer require "heyday/silverstripe-redirects"
+```
+composer require "heyday/silverstripe-redirects"
+```

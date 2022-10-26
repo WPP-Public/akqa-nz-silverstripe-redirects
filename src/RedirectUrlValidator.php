@@ -1,6 +1,6 @@
 <?php
 
-namespace Heyday\SilverStripeRedirects\Code;
+namespace Heyday\SilverStripeRedirects\Source;
 
 use SilverStripe\Forms\Validator;
 
@@ -22,7 +22,7 @@ class RedirectUrlValidator extends Validator
             );
             $valid = false;
         }
-        
+
         if ($data['FromType'] == 'manual' && empty($data['From'])) {
             $this->validationError(
                 'From',
@@ -31,7 +31,7 @@ class RedirectUrlValidator extends Validator
             );
             $valid = false;
         }
-        
+
         if ($data['ToType'] == 'page' && $data['ToRelationID'] == 0) {
             $this->validationError(
                 'ToRelationID',
@@ -40,7 +40,7 @@ class RedirectUrlValidator extends Validator
             );
             $valid = false;
         }
-        
+
         if ($data['ToType'] == 'manual' && empty($data['To'])) {
             $this->validationError(
                 'To',

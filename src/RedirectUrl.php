@@ -1,8 +1,9 @@
 <?php
 
-namespace Heyday\SilverStripeRedirects\Code;
+namespace Heyday\SilverStripeRedirects\Source;
 
 use Heyday\SilverStripeRedirects\Source\DataSource\CachedDataSource;
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HeaderField;
@@ -16,7 +17,7 @@ use SilverStripe\Security\PermissionProvider;
 
 /**
  * Class RedirectUrl
- * @package Heyday\SilverStripeRedirects\Code
+ * @package Heyday\SilverStripeRedirects\Source
  */
 class RedirectUrl extends DataObject implements PermissionProvider
 {
@@ -24,7 +25,7 @@ class RedirectUrl extends DataObject implements PermissionProvider
      * Permission for managing redirects
      */
     const PERMISSION = 'MANAGE_REDIRECTS';
-    
+
     /**
      * @var string
      */
@@ -43,8 +44,8 @@ class RedirectUrl extends DataObject implements PermissionProvider
      * @var array
      */
     private static $has_one = [
-        'FromRelation' => 'SilverStripe\CMS\Model\SiteTree',
-        'ToRelation' => 'SilverStripe\CMS\Model\SiteTree'
+        'FromRelation' => SiteTree::class,
+        'ToRelation' => SiteTree::class
     ];
 
     /**
@@ -297,9 +298,7 @@ class RedirectUrl extends DataObject implements PermissionProvider
     }
 
 
-    /**
-     * Clear out from and to manual links if we have a relation
-     */
+
     protected function onBeforeWrite()
     {
         parent::onBeforeWrite();
@@ -317,23 +316,21 @@ class RedirectUrl extends DataObject implements PermissionProvider
         }
     }
 
-    /**
-     *
-     */
+
     protected function onAfterWrite()
     {
         parent::onAfterWrite();
+
         if (isset($this->dataSource)) {
             $this->dataSource->delete();
         }
     }
 
-    /**
-     *
-     */
+
     protected function onAfterDelete()
     {
         parent::onAfterDelete();
+
         if (isset($this->dataSource)) {
             $this->dataSource->delete();
         }
