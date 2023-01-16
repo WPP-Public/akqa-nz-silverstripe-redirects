@@ -337,5 +337,4 @@ class RedirectUrl extends DataObject implements PermissionProvider
             $this->dataSource->delete();
         }
     }
-
 }

@@ -1,6 +1,9 @@
 ---
 Name: redirects
 ---
+SilverStripe\CMS\Model\SiteTree:
+  extensions:
+    - Heyday\SilverStripeRedirects\Source\RedirectExtension
 SilverStripe\Core\Injector\Injector:
   RedirectUrlDataSource:
     class: Heyday\SilverStripeRedirects\Source\DataSource\DataListDataSource
