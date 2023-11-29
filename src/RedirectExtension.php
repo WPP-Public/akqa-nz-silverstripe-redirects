@@ -9,8 +9,8 @@ class RedirectExtension extends DataExtension
     public function onAfterDelete()
     {
         $redirects = RedirectUrl::get()->filterAny([
-            'FromID' => $this->owner->ID,
-            'ToID' => $this->owner->ID
+            'FromRelationID' => $this->owner->ID,
+            'ToRelationID' => $this->owner->ID
         ]);
 
         foreach ($redirects as $redirect) {
